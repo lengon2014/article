@@ -3,8 +3,8 @@ package article;
 public class A003 {
 
 	public static void main(String args[]) {
-		String input = "abcabcbb";
-		System.out.println(build(input));
+		String input = "1";
+		System.out.println(build(input).length());
 	}
 
 	public static String build(String input) {
@@ -16,13 +16,13 @@ public class A003 {
 			for (int j = i+1; j < input.length(); j++) {
 				String nowChar = input.substring(j, j + 1);
 				if (content.indexOf(nowChar) > -1) {
-					if (content.length() > maxLength) {
-						maxLength = content.length();
-						maxString = content.toString();
-					}
 					break;
 				}
 				content.append(nowChar);
+			}
+			if (content.length() > maxLength) {
+				maxLength = content.length();
+				maxString = content.toString();
 			}
 		}
 		return maxString;

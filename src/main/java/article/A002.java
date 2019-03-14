@@ -3,8 +3,8 @@ package article;
 public class A002 {
 
 	public static void main(String args[]) {
-		A002Node node1 = buildNodes(2, 4, 3);
-		A002Node node2 = buildNodes(5, 6, 9);
+		A002Node node1 = buildNodes(1, 8);
+		A002Node node2 = buildNodes(0);
 		System.out.println(buildInfo(build(node1, node2)));
 	}
 
@@ -58,6 +58,8 @@ public class A002 {
 			if (sum >= 10) {
 				tenNumber = 1;
 				sum = sum - 10;
+			} else {
+				tenNumber = 0;
 			}
 
 			A002Node node = new A002Node(sum);
@@ -67,8 +69,12 @@ public class A002 {
 				pre.setNext(node);
 			}
 			pre = node;
-			node1 = node1.getNext();
-			node2 = node2.getNext();
+			if (node1 != null) {
+				node1 = node1.getNext();
+			}
+			if (node2 != null) {
+				node2 = node2.getNext();
+			}
 			if (node1 == null && node2 == null) {
 				if (tenNumber > 0) {
 					A002Node last = new A002Node(tenNumber);
