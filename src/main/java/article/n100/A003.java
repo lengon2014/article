@@ -1,4 +1,4 @@
-package article;
+package article.n100;
 
 public class A003 {
 

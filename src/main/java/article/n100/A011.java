@@ -1,4 +1,4 @@
-package article;
+package article.n100;
 
 /**
  * 11. Container With Most Water Medium

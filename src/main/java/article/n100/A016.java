@@ -1,4 +1,4 @@
-package article;
+package article.n100;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package article;
+package article.n100;
 
 /**
  * 14. Longest Common Prefix Easy

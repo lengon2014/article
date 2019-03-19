@@ -1,4 +1,4 @@
-package article;
+package article.n100;
 
 /**
  * Given a string s, find the longest palindromic substring in s. You may assume
