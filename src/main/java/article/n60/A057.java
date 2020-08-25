@@ -26,36 +26,91 @@ import article.ArrayUtils;
 public class A057 {
 
 	public static void main(String args[]) {
-		int[][] t = ArrayUtils.buildInts("[[1,5],[10,11],[15,2147483647]]");
-		int[] newInterval = new int[] { 4, 8 };
+		int[][] t = ArrayUtils.buildInts("[[0,2],[3,3],[6,11]]");
+		int[] newInterval = new int[] { 9, 15 };
 		A057 a = new A057();
 		System.out.println(ArrayUtils.buildInfo(a.merge(t, newInterval)));
 	}
 
 	public int[][] merge(int[][] intervals, int[] newInterval) {
+		// 判断是否有交集。 如果有， 那么进行计算并集
+		List<int[]> values = new ArrayList<>();
 
-		boolean isAdd = false;
-		List<int[]> result = new ArrayList<>();
+		// 没有值的情况
+		if (intervals.length == 0) {
+			values.add(newInterval);
+		}
+
 		for (int i = 0; i < intervals.length; i++) {
-			int start = intervals[i][0];
-			int end = intervals[i][1];
+			int[] start = intervals[i];
 
-			if (end < newInterval[0]) {
-				result.add(intervals[i]);
+			// 如果当前的值是在当前的2个数组的中间。 那么直接累计
+			if (null != newInterval && ((i == 0 && newInterval[1] < intervals[0][0])
+					|| (i > 0 && newInterval[0] > intervals[i - 1][1] && newInterval[1] < start[0]))) {
+				values.add(newInterval);
+				newInterval = null;
 			}
 
-			if (start > newInterval[0]) {
-				//插入一条数据
-				if (end > newInterval[0]) {
-   
+			if (null == newInterval) {
+				values.add(start);
+				continue;
+			}
+
+			// 包含关系
+			if (start[0] < newInterval[0] && start[1] > newInterval[1]) {
+				values.add(start);
+				// 变换为新的交界
+				newInterval = start;
+				continue;
+			}
+
+			if (newInterval[0] < start[0] && newInterval[1] > start[1]) {
+				// 如果是最后一个值。 那么需要
+				if (i == intervals.length - 1) {
+					values.add(newInterval);
+					newInterval = null;
 				}
+				continue;
 			}
+
+			// 没有交集的关系
+			if (start[1] < newInterval[0] || newInterval[1] < start[0]) {
+				// 如果在两个数组中间
+				if (values.size() > 0) {
+					// 右边相交
+					int[] preone = values.get(values.size() - 1);
+					if (preone[1] < newInterval[0] && newInterval[1] < start[0]) {
+						values.add(newInterval);
+						newInterval = null;
+					}
+				} else {
+					if (newInterval[1] < start[0]) {
+						values.add(newInterval);
+						newInterval = null;
+					}
+				}
+				values.add(start);
+				// 忽略
+				continue;
+			}
+
+			// 交集关系
+			int[] v = new int[] { Math.min(start[0], newInterval[0]), Math.max(start[1], newInterval[1]) };
+
+			// 如果和后面的也有交集， 那么需要抛弃
+			newInterval = v;
 		}
 
-		if (!isAdd) {
-			result.add(newInterval);
+		// 如果是在最后一个值
+		if (intervals.length > 0 && null != newInterval
+				&& (values.isEmpty() || newInterval[0] > values.get(values.size() - 1)[1])) {
+			values.add(newInterval);
 		}
 
-		return null;
+		int[][] result = new int[values.size()][2];
+		for (int i = 0; i < values.size(); i++) {
+			result[i] = values.get(i);
+		}
+		return result;
 	}
 }
